@@ -9,3 +9,11 @@ type Publisher struct {
 	Phone   string `db:"phone"`
 	Email   string `db:"email"`
 }
+
+type PublisherRepository interface {
+	GetAll() ([]Publisher , error)
+	GetByID(int) (*Publisher , error)
+	CreatePublisher(Publisher) (*Publisher , error)
+	UpdatePublisher(int , Publisher) (*Publisher , error)
+	DeletePublisher(int) (*Publisher , error)
+}

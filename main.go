@@ -28,9 +28,9 @@ func main() {
 	authorService := service.NewAuthorService(authorRepository)
 	authorHandler := handler.NewAuthorHandler(authorService)
 
-	// publisherRepository := repository.NewPublisherRepostioryDB(db)
-	// publisherService := service.NewPublisherService(publisherRepository)
-	// publisherHandler := handler.NewPublisherHandler(publisherService)
+	publisherRepository := repository.NewPublisherRepositoryDB(db)
+	publisherService := service.NewPublisherService(publisherRepository)
+	publisherHandler := handler.NewPublisherHandler(publisherService)
 
 	app.Get("/books",bookHandler.GetBookAll)
 	app.Get("/books/:id",bookHandler.GetBookByID)
@@ -44,11 +44,11 @@ func main() {
 	app.Put("/authors/:id",authorHandler.UpdateAuthor)
 	app.Delete("/authors/:id",authorHandler.DeleteAuthor)
 
-	// app.Get("/publishers",publisherHandler.GetPublisherAll)
-	// app.Get("/publishers/:id",publisherHandler.GetPublisherByID)
-	// app.Post("/publishers",publisherHandler.CreatePublisher)
-	// app.Put("/publishers/:id",publisherHandler.UpdatePublisher)
-	// app.Delete("/publishers/:id",publisherHandler.DeletePublisher)
+	app.Get("/publishers",publisherHandler.GetPublisherAll)
+	app.Get("/publishers/:id",publisherHandler.GetPublisherByID)
+	app.Post("/publishers",publisherHandler.CreatePublisher)
+	app.Put("/publishers/:id",publisherHandler.UpdatePublisher)
+	app.Delete("/publishers/:id",publisherHandler.DeletePublisher)
 
 	app.Listen(":8080")
 }

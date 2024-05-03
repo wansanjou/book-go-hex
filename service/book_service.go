@@ -119,7 +119,6 @@ func (bs bookService) UpdateBook(id int, book_res BookResponse) (*BookResponse, 
 			Genres:      book_res.Genres,
 	}
 
-	// Check if AuthorID and PublisherID are provided
 	if book_res.AuthorID != 0 {
 			book.AuthorID = book_res.AuthorID
 	}
@@ -127,7 +126,6 @@ func (bs bookService) UpdateBook(id int, book_res BookResponse) (*BookResponse, 
 			book.PublisherID = book_res.PublisherID
 	}
 
-	// Add WHERE condition to specify the row to update
 	u_book, err := bs.book_repo.UpdateBook(id, book)
 	if err != nil {
 			logs.Error(err)

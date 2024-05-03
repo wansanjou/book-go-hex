@@ -40,19 +40,20 @@ func (a authorRepositoryDB) CreateAuthor(author Author) (*Author , error)  {
 }
 
 func (a authorRepositoryDB) UpdateAuthor(id int , author Author) (*Author , error)  {
-	err := a.db.Model(&author).First(id).Error
-	if err != nil {
-		return nil, err
+	result := a.db.Where("id = ?", id).Updates(author)
+	if result.Error != nil {
+			return nil, result.Error
 	}
 
-	return &author , nil
+	return &author, nil
 }
 
 func (a authorRepositoryDB) DeleteAuthor(id int) (*Author , error)  {
-	err := a.db.Delete(id).Error
-	if err != nil {
-		return nil, err
+	author := Author{}
+	result := a.db.Model(&Author{}).Where("id = ?", id).Delete(&author)
+	if result.Error != nil {
+			return nil, result.Error
 	}
 
-	return nil , nil
+	return nil, nil
 }

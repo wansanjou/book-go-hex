@@ -47,6 +47,13 @@ func (as authorService) GetAuthorByID(id int) (*AuthorResponse, error) {
 }
 
 func (as authorService) CreateAuthor(author_res AuthorResponse) (*AuthorResponse, error) {
+	if author_res.Name == "" {
+		logs.Error("Pls enter Author name")
+	}
+
+	if author_res.Email == "" {
+		logs.Error("Pls enter Author email")
+	}
 
 	author := repository.Author{
 		Name: author_res.Name,

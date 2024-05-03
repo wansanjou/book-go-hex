@@ -21,7 +21,8 @@ func NewAuthorHandler(authorService service.AuthorService) authorHandler  {
 func (ah authorHandler) GetAuthorAll(c *fiber.Ctx) error  {
 	authors , err := ah.authorService.GetAuthorAll()
 	if err != nil {
-		return err
+		logs.Error(err)
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Record author not found"})
 	}
 
 	return c.JSON(authors)
@@ -37,7 +38,8 @@ func (ah authorHandler) GetAuthorByID(c *fiber.Ctx) error {
 
 	author, err := ah.authorService.GetAuthorByID(id)
 	if err != nil {	
-		logs.Error("Author not found")
+		logs.Error(err)
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Author not found"})
 	}
 
 	return c.JSON(author)
@@ -52,7 +54,7 @@ func (ah authorHandler) CreateAuthor(c *fiber.Ctx) error  {
 
 	response , err := ah.authorService.CreateAuthor(author)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create author"})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(response)
@@ -61,9 +63,7 @@ func (ah authorHandler) CreateAuthor(c *fiber.Ctx) error  {
 func (ah authorHandler) UpdateAuthor(c *fiber.Ctx) error  {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid ID",
-		})
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
 	}
 
 	var author service.AuthorResponse
@@ -74,7 +74,7 @@ func (ah authorHandler) UpdateAuthor(c *fiber.Ctx) error  {
 
 	response , err := ah.authorService.UpdateAuthor(id ,author)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update author"})
 	}
 
 	return c.JSON(response)
@@ -83,15 +83,14 @@ func (ah authorHandler) UpdateAuthor(c *fiber.Ctx) error  {
 func (ah authorHandler) DeleteAuthor(c *fiber.Ctx) error  {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid ID",
-		})
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
 	}
 
-	_ , err = ah.authorService.DeleteAuthor(id)
-	if err != nil {	
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error" : "Invalid request"})
+	_, err = ah.authorService.DeleteAuthor(id)
+	if err != nil {
+		logs.Error(err)
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete book"})
 	}
 
-	return nil 
+	return c.SendStatus(http.StatusNoContent)
 }

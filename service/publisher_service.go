@@ -96,11 +96,11 @@ func (ps publisherService) UpdatePublisher(id int, publishers_res PublisherRespo
 	}
 
 
-	publisher := repository.Publisher {
-			Name:        publishers_res.Name,
-			Address: 		 publishers_res.Address,
-			Phone:       publishers_res.Phone,
-			Email:       publishers_res.Email,
+	publisher := repository.Publisher{
+		Name:        publishers_res.Name,
+		Address: 		 publishers_res.Address,
+		Phone:       publishers_res.Phone,
+		Email:       publishers_res.Email,
 	}
 
 	u_publisher, err := ps.publisher_repo.UpdatePublisher(id, publisher)

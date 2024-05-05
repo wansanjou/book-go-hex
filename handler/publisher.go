@@ -10,15 +10,15 @@ import (
 )
 
 type publisherHandler struct {
-	publisher_service service.PublisherService
+	publisherService service.PublisherService
 }
 
-func NewPublisherHandler(publisher_service service.PublisherService) publisherHandler {
-	return publisherHandler{publisher_service: publisher_service}
+func NewPublisherHandler(publisherService service.PublisherService) publisherHandler {
+	return publisherHandler{publisherService: publisherService}
 }
 
 func (ph publisherHandler) GetPublisherAll(c *fiber.Ctx) error {
-	publishers, err := ph.publisher_service.GetPublisherAll()
+	publishers, err := ph.publisherService.GetPublisherAll()
 	if err != nil {
 		logs.Error(err)
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get publishers"})
@@ -33,7 +33,7 @@ func (ph publisherHandler) GetPublisherByID(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
 	}
 
-	publisher, err := ph.publisher_service.GetPublisherByID(id)
+	publisher, err := ph.publisherService.GetPublisherByID(id)
 	if err != nil {
 		logs.Error(err)
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get publisher"})
@@ -49,7 +49,7 @@ func (ph publisherHandler) CreatePublisher(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	response, err := ph.publisher_service.CreatePublisher(publisher)
+	response, err := ph.publisherService.CreatePublisher(publisher)
 	if err != nil {
 		logs.Error(err)
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create publisher"})
@@ -70,7 +70,7 @@ func (ph publisherHandler) UpdatePublisher(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	response, err := ph.publisher_service.UpdatePublisher(id, publisher)
+	response, err := ph.publisherService.UpdatePublisher(id, publisher)
 	if err != nil {
 		logs.Error(err)
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update publisher"})
@@ -85,7 +85,7 @@ func (ph publisherHandler) DeletePublisher(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
 	}
 
-	_, err = ph.publisher_service.DeletePublisher(id)
+	_, err = ph.publisherService.DeletePublisher(id)
 	if err != nil {
 		logs.Error(err)
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete book"})

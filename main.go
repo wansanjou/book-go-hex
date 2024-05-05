@@ -32,6 +32,10 @@ func main() {
 	publisherService := service.NewPublisherService(publisherRepository)
 	publisherHandler := handler.NewPublisherHandler(publisherService)
 
+	userRepository := repository.NewUserRepositoryFB(db)
+	userService := service.NewUserService(userRepository)
+	userHandler := handler.NewUserHandler(userService)
+
 	app.Get("/books",bookHandler.GetBookAll)
 	app.Get("/books/:id",bookHandler.GetBookByID)
 	app.Post("/books",bookHandler.CreateBook)
@@ -49,6 +53,12 @@ func main() {
 	app.Post("/publishers",publisherHandler.CreatePublisher)
 	app.Put("/publishers/:id",publisherHandler.UpdatePublisher)
 	app.Delete("/publishers/:id",publisherHandler.DeletePublisher)
+
+	app.Get("/users",userHandler.GetUserAll)
+	app.Get("/users/:id",userHandler.GetUserByID)
+	app.Post("/users",userHandler.CreateUser)
+	app.Put("/users/:id",userHandler.UpdateUser)
+	app.Delete("/users/:id",userHandler.DeleteUser)
 
 	app.Listen(":8080")
 }
@@ -83,6 +93,7 @@ func InitializeDB() *gorm.DB {
 	db.AutoMigrate(&repository.Book{})
 	db.AutoMigrate(&repository.Author{})
 	db.AutoMigrate(&repository.Publisher{})
+	db.AutoMigrate(&repository.User{})
 
 	logs.Info("Starting server at port :5050")
 	return db

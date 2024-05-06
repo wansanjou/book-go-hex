@@ -161,6 +161,17 @@ func (us userService) LoginUser(user_res UserResponse) (*UserResponse, error) {
 		return nil, err
 	}
 
+	// jwtSecretKey := "Testsecret" // ควรจะใช้จาก environment variable
+	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	// 	"user_id": selectedUser.ID,
+	// 	"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	// })
+
+	// t, err := token.SignedString([]byte(jwtSecretKey))
+	// if err != nil {
+	// 	return "", err
+	// }
+
 	return &UserResponse{
 		Email:     selectedUser.Email,
 		Firstname: selectedUser.Firstname,
